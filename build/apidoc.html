@@ -1,0 +1,200 @@
+<div class="apidocDiv">
+<style>
+/*csslint
+*/
+.apidocDiv {
+    background: #fff;
+    font-family: Arial, Helvetica, sans-serif;
+}
+.apidocDiv a[href] {
+    color: #33f;
+    font-weight: bold;
+    text-decoration: none;
+}
+.apidocDiv a[href]:hover {
+    text-decoration: underline;
+}
+.apidocCodeCommentSpan {
+    background: #bbf;
+    color: #000;
+    display: block;
+}
+.apidocCodeKeywordSpan {
+    color: #d00;
+    font-weight: bold;
+}
+.apidocCodePre {
+    background: #eef;
+    border: 1px solid;
+    color: #777;
+    padding: 5px;
+    white-space: pre-wrap;
+}
+.apidocFooterDiv {
+    margin-top: 20px;
+    text-align: center;
+}
+.apidocModuleLi {
+    margin-top: 10px;
+}
+.apidocSectionDiv {
+    border-top: 1px solid;
+    margin-top: 20px;
+}
+.apidocSignatureSpan {
+    color: #777;
+    font-weight: bold;
+}
+</style>
+<h1>api documentation for
+    <a
+
+        href="https://github.com/bevry/getmac"
+
+    >getmac (v1.2.1)</a>
+</h1>
+<h4>Get the mac address of the current machine you are on</h4>
+<div class="apidocSectionDiv"><a
+    href="#apidoc.tableOfContents"
+    id="apidoc.tableOfContents"
+><h1>table of contents</h1></a><ol>
+
+    <li class="apidocModuleLi"><a href="#apidoc.module.getmac">module getmac</a><ol>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.getmac.getMac">
+            function <span class="apidocSignatureSpan">getmac.</span>getMac
+            <span class="apidocSignatureSpan">(opts, next)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.getmac.isMac">
+            function <span class="apidocSignatureSpan">getmac.</span>isMac
+            <span class="apidocSignatureSpan">(macAddress)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <span class="apidocSignatureSpan">object <span class="apidocSignatureSpan">getmac.</span>macRegex</span>
+
+        </li>
+
+    </ol></li>
+
+</ol></div>
+
+<div class="apidocSectionDiv">
+<h1><a href="#apidoc.module.getmac" id="apidoc.module.getmac">module getmac</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.getmac.getMac" id="apidoc.element.getmac.getMac">
+        function <span class="apidocSignatureSpan">getmac.</span>getMac
+        <span class="apidocSignatureSpan">(opts, next)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">getMac = function (opts, next) {
+  var command, data, extractMac, ref;
+  ref = extractOptsAndCallback(opts, next), opts = ref[0], next = ref[1];
+  data = opts.data;
+  if (data == null) {
+    data = null;
+  }
+  command = isWindows ? &#x22;getmac&#x22; : &#x22;ifconfig -a || ip link&#x22;;
+  extractMac = function(data, next) {
+    var err, isZero, macAddress, match, result;
+    result = null;
+    while (match = macRegex.exec(data)) {
+      macAddress = match[0];
+      isZero = zeroRegex.test(macAddress);
+      if (isZero === false) {
+        if (result == null) {
+          result = macAddress;
+        }
+      }
+    }
+    if (result === null) {
+      err = new Error(&#x27;could not determine the mac address from:\n&#x27; + data);
+      return next(err);
+    }
+    return next(null, result);
+  };
+  if (data) {
+    return extractMac(data, next);
+  } else {
+    return exec(command, function(err, stdout, stderr) {
+      if (err) {
+        return next(err);
+      }
+      return extractMac(stdout, next);
+    });
+  }
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+1. Install Globally: `install -g getmac`
+2. Run with:  `getmac-node`
+
+### API
+
+``` javascript
+// Fetch the computer&#x27;s mac address
+require(&#x27;getmac&#x27;).<span class="apidocCodeKeywordSpan">getMac</span>(function(err,macAddress){
+	if (err)  throw err
+	console.log(macAddress)
+})
+
+// Validate that an address is a mac address
+if ( require(&#x27;getmac&#x27;).isMac(&#x22;e4:ce:8f:5b:a7:fc&#x22;) ) {
+	console.log(&#x27;valid mac&#x27;)
+...</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.getmac.isMac" id="apidoc.element.getmac.isMac">
+        function <span class="apidocSignatureSpan">getmac.</span>isMac
+        <span class="apidocSignatureSpan">(macAddress)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">isMac = function (macAddress) {
+  var ref;
+  return ((ref = String(macAddress).match(macRegex)) != null ? ref.length : void 0) === 1;
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+// Fetch the computer&#x27;s mac address
+require(&#x27;getmac&#x27;).getMac(function(err,macAddress){
+	if (err)  throw err
+	console.log(macAddress)
+})
+
+// Validate that an address is a mac address
+if ( require(&#x27;getmac&#x27;).<span class="apidocCodeKeywordSpan">isMac</span>(&#x22;e4:ce:8f:5b:a7:fc&#x22;) ) {
+	console.log(&#x27;valid mac&#x27;)
+}
+else {
+	console.log(&#x27;invalid mac&#x27;)
+}
+```
+...</pre></li>
+    </ul>
+
+
+
+
+</div>
+
+<div class="apidocFooterDiv">
+    [ this document was created with
+    <a href="https://github.com/kaizhu256/node-utility2" target="_blank">utility2</a>
+    ]
+</div>
+</div>
