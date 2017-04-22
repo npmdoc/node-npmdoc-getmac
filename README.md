@@ -1,4 +1,7 @@
-# api documentation for  [getmac (v1.2.1)](https://github.com/bevry/getmac)  [![npm package](https://img.shields.io/npm/v/npmdoc-getmac.svg?style=flat-square)](https://www.npmjs.org/package/npmdoc-getmac) [![travis-ci.org build-status](https://api.travis-ci.org/npmdoc/node-npmdoc-getmac.svg)](https://travis-ci.org/npmdoc/node-npmdoc-getmac)
+# npmdoc-getmac
+
+#### api documentation for  [getmac (v1.2.1)](https://github.com/bevry/getmac)  [![npm package](https://img.shields.io/npm/v/npmdoc-getmac.svg?style=flat-square)](https://www.npmjs.org/package/npmdoc-getmac) [![travis-ci.org build-status](https://api.travis-ci.org/npmdoc/node-npmdoc-getmac.svg)](https://travis-ci.org/npmdoc/node-npmdoc-getmac)
+
 #### Get the mac address of the current machine you are on
 
 [![NPM](https://nodei.co/npm/getmac.png?downloads=true&downloadRank=true&stars=true)](https://www.npmjs.com/package/getmac)
